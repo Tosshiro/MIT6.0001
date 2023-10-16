@@ -1,7 +1,6 @@
 # Problem Set 2, hangman.py
-# Name: 
-# Collaborators:
-# Time spent:
+# @author Jw
+
 
 # Hangman Game
 # -----------------------------------
