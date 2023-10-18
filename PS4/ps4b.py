@@ -70,7 +70,8 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
 
     def get_message_text(self):
         '''
@@ -78,7 +79,8 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +89,8 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        valid_words_copy = (self.valid_words).copy()
+        return valid_words_copy
 
     def build_shift_dict(self, shift):
         '''
@@ -103,7 +106,22 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        lowercase_letters = list(string.ascii_lowercase)
+        uppercase_letters = list(string.ascii_uppercase)
+        letters_dict = {}
+
+        for i in range(26):
+            if i + shift <= 25:
+                letters_dict[lowercase_letters[i]] = lowercase_letters[i + shift]
+                letters_dict[uppercase_letters[i]] = uppercase_letters[i + shift]
+            else:
+                #-26 helps to shift letter not beyond index 26 as there is only 26 letters
+                letters_dict[lowercase_letters[i]] = lowercase_letters[i + shift - 26]
+                letters_dict[uppercase_letters[i]] = uppercase_letters[i + shift - 26]
+
+        return letters_dict
+
+
 
     def apply_shift(self, shift):
         '''
@@ -117,7 +135,16 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        letters_dict = self.build_shift_dict(shift)
+        text_message = self.get_message_text()
+        cipher_text = ""
+        for element in text_message:
+            if element != " " and element not in string.punctuation:
+                cipher_text += letters_dict[element]
+            else:
+                cipher_text += element
+
+        return cipher_text
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -135,7 +162,11 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        pass #delete this line and replace with your code here
+
+        Message.__init__(self,text)   #For self.message_text and self.valid_words
+        self.shift = shift
+        self.encryption_dict = Message.build_shift_dict(self, shift)
+        self.message_text_encrypted = Message.apply_shift(self,shift)
 
     def get_shift(self):
         '''
@@ -143,7 +174,7 @@ class PlaintextMessage(Message):
         
         Returns: self.shift
         '''
-        pass #delete this line and replace with your code here
+        return self.shift
 
     def get_encryption_dict(self):
         '''
@@ -151,7 +182,8 @@ class PlaintextMessage(Message):
         
         Returns: a COPY of self.encryption_dict
         '''
-        pass #delete this line and replace with your code here
+        encryption_dict = (self.encryption_dict).copy()
+        return encryption_dict
 
     def get_message_text_encrypted(self):
         '''
@@ -159,11 +191,12 @@ class PlaintextMessage(Message):
         
         Returns: self.message_text_encrypted
         '''
-        pass #delete this line and replace with your code here
+
+        return self.message_text_encrypted
 
     def change_shift(self, shift):
         '''
-        Changes self.shift of the PlaintextMessage and updates other 
+        Changes self.shift of the PlaintextMessage and updates other
         attributes determined by shift.        
         
         shift (integer): the new shift that should be associated with this message.
@@ -171,7 +204,7 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        pass #delete this line and replace with your code here
+        self.__init__(self.text, shift)  #Substitute new shift value in, self.text used to reuse same text
 
 
 class CiphertextMessage(Message):
