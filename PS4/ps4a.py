@@ -1,5 +1,5 @@
 # Problem Set 4A
-# Name: Huang Jianwei
+# @author: Jw
 
 
 def get_permutations(sequence):
@@ -14,15 +14,25 @@ def get_permutations(sequence):
 
     Returns: a list of all permutations of sequence
 
-    Example:
-    >>> get_permutations('abc')
-    ['abc', 'acb', 'bac', 'bca', 'cab', 'cba']
-
     Note: depending on your implementation, you may return the permutations in
     a different order than what is listed here.
     '''
+    #Base case
+    if len(sequence) == 1:
+        return [sequence]
 
-    pass #delete this line and replace with your code here
+    permutations = []
+    #Take out element that serves as first character
+    for letter in sequence:
+        remaining_letters = sequence.replace(letter, "")
+        sublist_permutations = get_permutations(remaining_letters)  #permutations of sublist
+
+        for i in sublist_permutations:
+            permutations.append(letter + i)
+
+    return permutations
+
+
 
 if __name__ == '__main__':
 #    #EXAMPLE
@@ -35,5 +45,19 @@ if __name__ == '__main__':
 #    to be three characters or fewer as you will have n! permutations for a 
 #    sequence of length n)
 
-    pass #delete this line and replace with your code here
+    example_input = "job"
+    print('Input:', example_input)
+    print('Expected Output:', ['job', 'jbo', 'ojb', 'obj', 'bjo', 'boj'])
+    print('Actual Output:', get_permutations(example_input))
+
+    example_input1 = "a"
+    print('Input:', example_input1)
+    print('Expected Output:', ['a'])
+    print('Actual Output:', get_permutations(example_input1))
+
+    example_input2 = "be"
+    print('Input:', example_input2)
+    print('Expected Output:', ['be','eb'])
+    print('Actual Output:', get_permutations(example_input2))
+
 
