@@ -1,7 +1,5 @@
 # Problem Set 4B
-# Name: <your name here>
-# Collaborators:
-# Time Spent: x:xx
+# @author: Jw
 
 import string
 
@@ -36,11 +34,6 @@ def is_word(word_list, word):
     
     Returns: True if word is in word_list, False otherwise
 
-    Example:
-    >>> is_word(word_list, 'bat') returns
-    True
-    >>> is_word(word_list, 'asdf') returns
-    False
     '''
     word = word.lower()
     word = word.strip(" !@#$%^&*()-_+={}[]|\:;'<>?,./\"")
@@ -218,7 +211,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        Message.__init__(self,text)
 
     def decrypt_message(self):
         '''
@@ -236,22 +229,57 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        pass #delete this line and replace with your code here
 
+        best_shift = [0,'']
+        decrypted_text = ''
+        correct_decrypted_text = ''
+        s = 0
+        count = 0
+
+        for i in range(27):
+            decrypted_text += self.apply_shift(i)
+            words = decrypted_text.split()
+            for word in words:
+                if is_word(self.valid_words, word):
+                    count += 1
+                    correct_decrypted_text += word + ' '
+            #Reset test string value
+            decrypted_text = ''
+
+        #If more actual words formed
+            if count > s:
+                best_shift[0] = i
+                best_shift[1] = ''
+                best_shift[1] += correct_decrypted_text
+                # Reset test string value
+                correct_decrypted_text = ''
+                #Store larger integer value
+                s = count
+                count = 0
+            else:
+                #Reset counting word value regardless of result
+                count = 0
+
+        return (best_shift[0],best_shift[1][:-1])
+
+
+#TEST
 if __name__ == '__main__':
 
-#    #Example test case (PlaintextMessage)
-#    plaintext = PlaintextMessage('hello', 2)
-#    print('Expected Output: jgnnq')
-#    print('Actual Output:', plaintext.get_message_text_encrypted())
-#
-#    #Example test case (CiphertextMessage)
-#    ciphertext = CiphertextMessage('jgnnq')
-#    print('Expected Output:', (24, 'hello'))
-#    print('Actual Output:', ciphertext.decrypt_message())
+    # Example test case (PlaintextMessage)
+    plaintext = PlaintextMessage('hello', 2)
+    print('Expected Output: jgnnq')
+    print('Actual Output:', plaintext.get_message_text_encrypted())
 
-    #TODO: WRITE YOUR TEST CASES HERE
+    plaintext = PlaintextMessage('hello, WorLD!', 4)
+    print('Expected Output: lipps, AsvPH!')
+    print('Actual Output:', plaintext.get_message_text_encrypted())
 
-    #TODO: best shift value and unencrypted story 
-    
-    pass #delete this line and replace with your code here
+    # Example test case (CiphertextMessage)
+    ciphertext = CiphertextMessage('lipps, asvph')
+    print('Expected Output:', (22, 'hello, world'))
+    print('Actual Output:', ciphertext.decrypt_message())
+
+    # Best shift value and unencrypted story
+    ciphertext = CiphertextMessage(get_story_string())
+    print('Decrypted Story : ', ciphertext.decrypt_message())
