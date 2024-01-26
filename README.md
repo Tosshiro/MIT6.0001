@@ -16,4 +16,4 @@ ex. Huang Jianwei
 
 ## Version History
 
-Finished this course during Novembwer 2023. 
+Finished this course during November 2023. 
